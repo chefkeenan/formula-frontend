@@ -1,0 +1,32 @@
+"use client";
+import Link from 'next/link'
+import React from 'react'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation';
+
+export default function Navbar() {
+    const pathname = usePathname();
+    const isAuth = pathname === "/login" || pathname === "/register";
+
+    if (isAuth) {
+    return null;
+  }
+
+  return (
+    <nav className="bg-white shadow-sm">
+        <div className="mx-auto py-5 px-8 flex justify-between items-center">
+            <Link href="/" className="flex items-center">
+                <Image src={"/logo.svg"} width={40} height={40} alt="logo" />
+                <h1 className="mx-2 text-2xl font-bold text-blue1">Formula</h1>
+            </Link>
+        <div className="flex items-center gap-4">
+          
+          <Link href="/login" className="bg-blue1 text-white px-6 py-2.5 rounded font-semibold hover:bg-blue3 transition-colors text-sm">
+            Login
+          </Link>
+        </div>
+        </div>
+
+    </nav> 
+  )
+}
