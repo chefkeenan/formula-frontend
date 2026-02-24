@@ -7,13 +7,15 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
     const pathname = usePathname();
     const isAuth = pathname === "/login" || pathname === "/register";
+    const isDashboard = pathname.startsWith("/dashboard");
+    const isForm = pathname.startsWith("/forms")
 
     if (isAuth) {
     return null;
   }
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className={`bg-white shadow-sm  ${isDashboard ? 'fixed top-0 w-full z-50' : ''} ${isForm ? 'hidden' : ''}`}>
         <div className="mx-auto py-5 px-8 flex justify-between items-center">
             <Link href="/" className="flex items-center">
                 <Image src={"/logo.svg"} width={40} height={40} alt="logo" />
