@@ -1,12 +1,31 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNav from './_components/SideNav';
-import { Circle, Users, ExternalLink } from 'lucide-react';
+import { Circle, ExternalLink } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    
+    if (!token) {
+      router.push("/login");
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [router])
+
+  if (!isAuthenticated) {
+    return (
+      <div className="h-screen bg-cream1 flex items-center justify-center">
+        <p className="text-blue1 font-semibold">Loading</p>
+      </div>
+    );
+  }
 
   const dummyData = [
     {
