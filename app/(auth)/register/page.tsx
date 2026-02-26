@@ -68,43 +68,43 @@ export default function RegisterPage() {
         <br className="border" />
 
         <form onSubmit={handleSubmit(onSubmit)}>
-<Input 
-    className="rounded-xl shadow-md bg-white" 
-    label="Email" 
-    type="email" 
-    placeholder="Enter your email" 
-    {...register("email")}
-    error={errors.email?.message}
-  />
+          <Input 
+              className="rounded-xl shadow-md bg-white" 
+              label="Email" 
+              type="email" 
+              placeholder="Enter your email" 
+              {...register("email")}
+              error={errors.email?.message}
+            />
 
-  <Input 
-    className="rounded-xl shadow-md bg-white" 
-    label="Username" 
-    type="text" 
-    placeholder="Choose a username" 
-    {...register("username")}
-    error={errors.username?.message}
-  />
+          <Input 
+            className="rounded-xl shadow-md bg-white" 
+            label="Username" 
+            type="text" 
+            placeholder="Choose a username" 
+            {...register("username")}
+            error={errors.username?.message}
+          />
 
-  <Input 
-    className="rounded-xl shadow-md bg-white" 
-    label="Password" 
-    type="password" 
-    placeholder="Create password" 
-    {...register("password")}
-    error={errors.password?.message}
-  />
+          <Input 
+            className="rounded-xl shadow-md bg-white" 
+            label="Password" 
+            type="password" 
+            placeholder="Create password" 
+            {...register("password")}
+            error={errors.password?.message}
+          />
 
-  <Input 
-    className="rounded-xl shadow-md bg-white" 
-    label="Confirm Password" 
-    type="password" 
-    placeholder="Confirm password" 
-    {...register("confirmPassword")}
-    error={errors.confirmPassword?.message}
-  />
+          <Input 
+            className="rounded-xl shadow-md bg-white" 
+            label="Confirm Password" 
+            type="password" 
+            placeholder="Confirm password" 
+            {...register("confirmPassword")}
+            error={errors.confirmPassword?.message}
+          />
           
-          <Button type="submit">Sign Up</Button>
+          <Button className="w-full" type="submit">Sign Up</Button>
         </form>
 
         <p className="mt-6  text-sm text-gray-600">

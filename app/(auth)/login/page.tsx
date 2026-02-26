@@ -78,7 +78,7 @@ export default function LoginPage() {
             error={errors.password?.message}
           />
           
-          <Button type="submit">Sign In</Button>
+          <Button className="w-full" type="submit">Sign In</Button>
         </form>
 
         <p className="mt-6  text-sm text-gray-600">

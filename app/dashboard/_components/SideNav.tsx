@@ -1,10 +1,15 @@
 "use client";
+import Button from '@/app/_components/Button';
 import { Form, LogOut, PlusCircle, User } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 
-export default function SideNav() {
+interface SideNavProps {
+  onCreateForm?: () => void;
+}
+
+export default function SideNav({ onCreateForm }: SideNavProps) {
     const path = usePathname();
     const router = useRouter();
     const [username, setUsername] = useState("User")
@@ -26,21 +31,32 @@ export default function SideNav() {
         router.push("/login");
     }
 
+    const handleCreateForm = () => {
+      if (onCreateForm) {
+        onCreateForm();
+      } else {
+        router.push("/dashboard");
+      }
+    };
+
   return (
     <div className="h-[calc(100vh-5rem)] shadow-md border-gray-200 border bg-gray-50 flex flex-col justify-between">
         <div className="p-4">
-            <h2
-            className={`flex text-blue1 items-center gap-3 p-3 hover:bg-gray-100 rounded-md mb-4
-            ${path == "/dashboard" && "bg-gray-100"}`}>
-                <Form />
-                My Forms
-            </h2>
-
-            <h2
-            className={`flex text-blue1 items-center gap-3 p-3 hover:bg-gray-100 rounded-md mb-4
+            
+            <div className='border-b border-gray-200 mb-3'>
+            <Button onClick={handleCreateForm}
+            className={`flex text-blue1 items-center gap-3 p-3 rounded-md mb-4
             ${path == "/dashboard/response" && "bg-gray-100"}`}>
                 <PlusCircle />
                 Create a New Form
+            </Button>
+            </div>
+
+            <h2
+            className={`border-t border-gray-200 flex text-blue1 items-center gap-3 p-3 hover:bg-gray-100 rounded-md mb-4
+            ${path == "/dashboard" && "bg-gray-100"}`}>
+                <Form />
+                My Forms
             </h2>
         </div>
 
