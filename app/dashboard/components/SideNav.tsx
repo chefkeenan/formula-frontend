@@ -1,5 +1,5 @@
 "use client";
-import Button from '@/app/_components/Button';
+import Button from '@/components/FormulaButton';
 import { Form, LogOut, PlusCircle, User } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -10,37 +10,37 @@ interface SideNavProps {
 }
 
 export default function SideNav({ onCreateForm }: SideNavProps) {
-    const path = usePathname();
-    const router = useRouter();
-    const [username, setUsername] = useState("User")
+  const path = usePathname();
+  const router = useRouter();
+  const [username, setUsername] = useState("User")
 
-    useEffect(()=> {
-        const currentUsername = localStorage.getItem("username")
+  useEffect(()=> {
+      const currentUsername = localStorage.getItem("username")
 
-        if (currentUsername) {
-            setUsername(currentUsername)
-        }
-    }, [])
-
-    const handleLogout = () => {
-        localStorage.removeItem("access_token")
-        localStorage.removeItem("refresh_token")
-        localStorage.removeItem("username")
-
-        toast.success("You have been logged out.");
-        router.push("/login");
-    }
-
-    const handleCreateForm = () => {
-      if (onCreateForm) {
-        onCreateForm();
-      } else {
-        router.push("/dashboard");
+      if (currentUsername) {
+          setUsername(currentUsername)
       }
-    };
+  }, [])
+
+  const handleLogout = () => {
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+      localStorage.removeItem("username")
+
+      toast.success("You have been logged out.");
+      router.push("/login");
+  }
+
+  const handleCreateForm = () => {
+    if (onCreateForm) {
+      onCreateForm();
+    } else {
+      router.push("/dashboard");
+    }
+  };
 
   return (
-    <div className="h-[calc(100vh-5rem)] shadow-md border-gray-200 border bg-gray-50 flex flex-col justify-between">
+    <div className="h-[calc(100vh-5rem)] shadow-md border-gray-200 border bg-white flex flex-col justify-between">
         <div className="p-4">
             
             <div className='border-b border-gray-200 mb-3'>

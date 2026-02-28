@@ -16,6 +16,7 @@ export default function Navbar() {
     const isAuth = pathname === "/login" || pathname === "/register";
     const isDashboard = pathname.startsWith("/dashboard");
     const isForm = pathname.startsWith("/forms")
+    const isEditForm = pathname.startsWith("/forms/e")
 
     if (isAuth) {
     return null;

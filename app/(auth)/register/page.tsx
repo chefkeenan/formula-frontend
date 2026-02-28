@@ -1,6 +1,6 @@
 "use client";
-import Button from '@/app/_components/Button'
-import Input from '@/app/_components/Input'
+import Button from '@/components/FormulaButton'
+import Input from '@/components/Input'
 import Image from 'next/image'
 import Link from 'next/link'
 import { z } from "zod";
@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { axiosInstance } from '@/app/lib/utils';
 import toast from 'react-hot-toast';
+import { axiosInstance } from '@/lib/utils';
 
 const registerSchema = z.object({
   email: z.string().email("Invalid email format"),

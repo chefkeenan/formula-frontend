@@ -1,6 +1,6 @@
-import Button from '@/app/_components/Button';
-import Input from '@/app/_components/Input';
-import Textarea from '@/app/_components/TextArea';
+import Button from '@/components/FormulaButton';
+import Input from '@/components/Input';
+import Textarea from '@/components/TextArea';
 import Image from 'next/image';
 import Link from 'next/link';
 

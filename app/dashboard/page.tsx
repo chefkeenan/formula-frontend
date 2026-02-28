@@ -1,13 +1,32 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import SideNav from './_components/SideNav';
+import SideNav from './components/SideNav';
 import { CheckSquare, Circle, Edit2, ExternalLink, Plus, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FormInterface } from '../lib/types';
-import { axiosInstance } from '../lib/utils';
 import toast from 'react-hot-toast';
-import Button from '../_components/Button';
+import Button from '../../components/FormulaButton';
+import { axiosInstance } from '@/lib/utils';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+export interface FormInterface {
+  id: string;
+  title: string;
+  description: string;
+  creator: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -77,13 +96,7 @@ export default function DashboardPage() {
     setEditTitle(currentTitle);
   }
 
-  const handleDeleteForm = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    
-    if (!window.confirm("Are you sure you want to delete this form?")) {
-      return
-    }
-    
+  const handleDeleteForm = async (id: string) => {
     try {
       await axiosInstance.delete(`/api/forms/${id}/`);
       
@@ -131,12 +144,35 @@ export default function DashboardPage() {
               onClick={() => router.push(`/forms/${form.id}/edit`)}
               className="bg-white border border-gray-200 rounded-md p-5 shadow-sm hover:shadow-md transition-all cursor-pointer relative group min-h-[180px] flex flex-col">
 
-              <button 
-              onClick={(e) => handleDeleteForm(form.id, e)} 
-              className="absolute top-5 right-3 text-gray-400 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 p-1 z-10"
-              title="Delete Form">
-              <Trash2 size={18} />
-              </button>
+              <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button onClick={(e) => e.stopPropagation()}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 p-1 z-10"
+                  title="Delete Form">
+                  <Trash2 size={18} />
+                </button>
+              </AlertDialogTrigger>
+              
+              <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure you want to delete this form?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteForm(form.id);
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white">
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+              </AlertDialog>
 
               <div className="flex justify-between items-start mb-4">
                 <div className="w-full pr-6">
