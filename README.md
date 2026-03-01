@@ -12,7 +12,7 @@ A Frontend application for a Form Builder website. This project was developed as
     * Icons provided by Lucide React.
 * **Form Management & Validation**: React Hook Form combined with Zod and `@hookform/resolvers` schema validation.
 * **HTTP Client**: Axios for handling API requests.
-* **Notifications**: React Hot Toast for UI alerts and feedback.
+* **Notifications**: React Hot Toast for UI alerts.
 
 ## Run Locally
 
@@ -26,7 +26,7 @@ Make sure you have **Node.js** and a package manager like **npm** installed on y
 1.  **Clone the Repository**:
     If you haven't already, clone this repository to your local machine.
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/chefkeenan/formula-frontend
     cd formula-frontend
     ```
 
