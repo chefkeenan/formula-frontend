@@ -120,14 +120,14 @@ export default function ViewFormPage() {
     return (
       <div className="min-h-screen flex justify-center bg-cream1 p-4">
         <div className="max-h-100 w-full mt-10 md:mt-15 mb-10 md:mb-30 max-w-195 shadow bg-white py-8 px-6 md:px-22 rounded-xl flex flex-col">
-          <div className="mb-8">
+          <div className="mb-8 mt-9">
             <Link href={"/"}>
               <Image src={"/logo.svg"} width={30} height={40} alt='logo' />
             </Link>
-            <h1 className="text-3xl font-bold mb-2 mt-3 text-gray-900">{form?.title}</h1>
-            <p className="text-gray-500 font-medium text-md">Your response has been recorded.</p>
+            <h1 className="text-4xl font-extrabold mb-2 mt-3 text-gray-900">{form?.title}</h1>
+            <p className="text-gray-500 font-medium text-md">Your response has been submitted.</p>
           </div>
-          <div className="pt-4 flex justify-start">
+          <div className="mt-15 pt-4 flex justify-start">
             <button onClick={() => window.location.reload()} className="text-blue1 font-medium hover:underline">
               Submit another response
             </button>

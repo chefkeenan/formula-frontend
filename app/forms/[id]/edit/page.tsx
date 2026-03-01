@@ -39,6 +39,7 @@ export default function EditFormPage() {
   const [hasSubmissions, setHasSubmissions] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const [isAcceptingResponses, setIsAcceptingResponses] = useState(true);
+  const [isUnsaved, setIsUnsaved] = useState(false);
 
   useEffect(() => {
     if (id) fetchFormDetail();
@@ -78,6 +79,18 @@ export default function EditFormPage() {
     }
   }
 
+    useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        if (isUnsaved) {
+        e.preventDefault();
+        e.returnValue = ""; 
+        }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    }, [isUnsaved]);
+
   const addQuestion = (type: QuestionType) => {
     if (hasSubmissions) return; 
 
@@ -88,10 +101,12 @@ export default function EditFormPage() {
       required: false,
       options: (type === "radio" || type === "checkbox" || type === "dropdown") ? ["Option 1"] : [],
     }
+    setIsUnsaved(true)
     setQuestions([...questions, newQuestion]);
   }
 
 const updateQuestion = (qId: string, field: keyof Question, value: any) => {
+    setIsUnsaved(true)
     const updatedList = questions.map((q) => {
       if (q.id === qId) {
         return { ...q, [field]: value }
@@ -102,11 +117,13 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
   }
 
   const deleteQuestion = (qId: string) => {
+    setIsUnsaved(true)
     const remainingQuestions = questions.filter((q) => q.id !== qId)
     setQuestions(remainingQuestions)
   }
 
   const addOption = (qId: string) => {
+    setIsUnsaved(true)
     const updatedList = questions.map((q) => {
       if (q.id === qId) {
         const newOptions = [...q.options, `Option ${q.options.length + 1}`]
@@ -119,6 +136,7 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
   }
 
   const updateOption = (qId: string, optIndex: number, newValue: string) => {
+    setIsUnsaved(true)
     const updatedList = questions.map((q) => {
       if (q.id === qId) {
         const copyOfOptions = [...q.options]
@@ -132,6 +150,7 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
   }
 
   const removeOption = (qId: string, optIndex: number) => {
+    setIsUnsaved(true)
     const updatedList = questions.map((q) => {
       if (q.id === qId) {
         const filteredOptions = q.options.filter((option, i) => i !== optIndex)
@@ -146,6 +165,7 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
     try {
       await axiosInstance.patch(`/api/forms/${id}/`, { title: formTitle, description: formDescription, is_accepting_responses: isAcceptingResponses, questions: questions });
       toast.success("Form has been saved");
+      setIsUnsaved(false)
     } catch (error: any) {
       const errorData = error.response?.data?.questions;
       const errorMessage = Array.isArray(errorData) ? errorData[0] : (errorData || "Failed to save form");
@@ -155,7 +175,7 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream1">
-      <EditorNavbar onSave={handleSaveAll}  id={id}/>
+      <EditorNavbar onSave={handleSaveAll} id={id} isUnsaved={isUnsaved}/>
       <div className="flex flex-1 pt-16">
         <EditorSidebar onAddQuestion={addQuestion} />
 
@@ -177,11 +197,11 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
                  <Image src={"/logo.svg"} width={30} height={40} alt='logo' className="mb-4" />
               </div>
               <input 
-                type="text" value={formTitle} onChange={(e) => setFormTitle(e.target.value)}
+                type="text" value={formTitle} onChange={(e) => {setIsUnsaved(true), setFormTitle(e.target.value)}}
                 className="w-full text-4xl font-extrabold text-gray-900 bg-transparent focus:outline-none pb-1 transition-colors placeholder:text-gray-300"
                 placeholder="Form Title"/>
               <textarea 
-                value={formDescription} onChange={(e) => setFormDescription(e.target.value)}
+                value={formDescription} onChange={(e) => {setIsUnsaved(true), setFormDescription(e.target.value)}}
                 className="w-full mt-3 border-b-2 text-gray-500 font-medium text-base bg-transparent focus:outline-none resize-none transition-colors placeholder:text-gray-300"
                 placeholder="Form description..." rows={3}/>
             </div>

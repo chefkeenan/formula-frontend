@@ -28,7 +28,7 @@ export default function SideNav({ onCreateForm }: SideNavProps) {
       localStorage.removeItem("username")
 
       toast.success("You have been logged out.");
-      router.push("/login");
+      router.push("/");
   }
 
   const handleCreateForm = () => {

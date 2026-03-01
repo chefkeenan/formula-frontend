@@ -55,7 +55,7 @@ export default function Home() {
               <div className="flex flex-col rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Instant insights</h3>
                 <p className="text-gray-600 leading-relaxed text-sm">
-                  View, manage, and analyze your form responses in real-time through an organized dashboard.
+                  View, manage, and analyze your form responses in real-time.
                 </p>
               </div>
               
