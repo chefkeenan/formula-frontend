@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const axiosInstance = axios.create({
 
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://formula-backend-production.up.railway.app",
   headers: {
     "Content-Type": "application/json",
   },
