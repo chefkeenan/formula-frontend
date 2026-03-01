@@ -55,8 +55,13 @@ export default function EditFormPage() {
       const isLocked = response.data.has_submissions || false
       setHasSubmissions(isLocked)
       
-      if (isLocked) {
-        setShowAlertDialog(true)
+    if (isLocked) {
+            const hasSeenAlert = localStorage.getItem(`seen_locked_alert_${id}`);
+            
+            if (!hasSeenAlert) {
+            setShowAlertDialog(true);
+            localStorage.setItem(`seen_locked_alert_${id}`, "true");
+            }
       }
 
       const currentQuestion = response.data.questions || []
