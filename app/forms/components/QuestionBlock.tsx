@@ -15,6 +15,7 @@ export interface Question {
 interface QuestionBlockProps {
     question: Question;
     index: number;
+    hasSubmissions?: boolean;
     onUpdate: (id: string, field: keyof Question, value: any) => void;
     onDelete: (id: string) => void;
     onAddOption: (id: string) => void;

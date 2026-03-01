@@ -82,11 +82,11 @@ export default function DashboardPage() {
     try {
       await axiosInstance.patch(`/api/forms/${id}/`, {title: editTitle});
       
-      toast.success("Title updated!");
+      toast.success("Title updated");
       setEditId(null);
       fetchForms();
     } catch (error) {
-      toast.error("Failed to update title.");
+      toast.error("Failed to update title");
     }
   }
 
@@ -191,7 +191,7 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                 <div className="flex items-center gap-2 mb-2 group/title">
-                  <h3 className="text-xl font-bold text-blue2 group-hover:text-blue-700 transition-colors truncate">
+                  <h3 className="text-xl font-bold text-blue2 group-hover:text-blue-800 transition-colors truncate">
                     {form.title}
                   </h3>
                   <button 
@@ -211,6 +211,7 @@ export default function DashboardPage() {
                 <span>0 Responses</span>
                 <Link
                   href={`/forms/${form.id}`}
+                  target="_blank"
                   onClick={(e) => e.stopPropagation()}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-blue1 hover:bg-blue-50 hover:text-blue-700 transition-colors">
                   <ExternalLink size={16} />

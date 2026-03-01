@@ -7,6 +7,16 @@ import Image from "next/image";
 import EditorNavbar from "@/app/forms/components/EditorNavbar";
 import EditorSidebar from "@/app/forms/components/EditorSidebar";
 import QuestionBlock from "../../components/QuestionBlock";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Switch } from "@/components/ui/switch";
 
 type QuestionType = "text" | "textarea" | "radio" | "checkbox" | "dropdown";
 
@@ -25,8 +35,10 @@ export default function EditFormPage() {
 
   const [formTitle, setFormTitle] = useState("Loading...");
   const [formDescription, setFormDescription] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [hasSubmissions, setHasSubmissions] = useState(false);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [isAcceptingResponses, setIsAcceptingResponses] = useState(true);
 
   useEffect(() => {
     if (id) fetchFormDetail();
@@ -37,6 +49,15 @@ export default function EditFormPage() {
       const response = await axiosInstance.get(`/api/forms/${id}/`);
       setFormTitle(response.data.title)
       setFormDescription(response.data.description || "")
+      setIsAcceptingResponses(response.data.is_accepting_responses ?? true)
+      
+      const isLocked = response.data.has_submissions || false
+      setHasSubmissions(isLocked)
+      
+      if (isLocked) {
+        setShowAlertDialog(true)
+      }
+
       const currentQuestion = response.data.questions || []
 
       if (currentQuestion.length === 0) {
@@ -58,6 +79,8 @@ export default function EditFormPage() {
   }
 
   const addQuestion = (type: QuestionType) => {
+    if (hasSubmissions) return; 
+
     const newQuestion: Question = {
       id: crypto.randomUUID(),
       type,
@@ -120,26 +143,36 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
   }
 
   const handleSaveAll = async () => {
-    setIsSaving(true);
     try {
-      await axiosInstance.patch(`/api/forms/${id}/`, { title: formTitle, description: formDescription, questions: questions });
+      await axiosInstance.patch(`/api/forms/${id}/`, { title: formTitle, description: formDescription, is_accepting_responses: isAcceptingResponses, questions: questions });
       toast.success("Form has been saved");
-    } catch (error) {
-      toast.error("Failed to save form");
-    } finally {
-      setIsSaving(false)
-    }
+    } catch (error: any) {
+      const errorData = error.response?.data?.questions;
+      const errorMessage = Array.isArray(errorData) ? errorData[0] : (errorData || "Failed to save form");
+      toast.error(errorMessage);
+    } 
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-cream1">
-      <EditorNavbar onSave={handleSaveAll} />
+      <EditorNavbar onSave={handleSaveAll}  id={id}/>
       <div className="flex flex-1 pt-16">
         <EditorSidebar onAddQuestion={addQuestion} />
 
         <main className="ml-64 flex-1 p-4 md:p-10 pb-32 overflow-y-auto flex justify-center">
           <div className="w-full max-w-3xl shadow-md bg-white py-12 px-8 md:px-16 rounded-xl flex flex-col min-h-[70vh]">
             <div className="mb-10 pb-6 relative group">
+
+              <div className="absolute top-0 right-0 flex items-center gap-3">
+                <span className={`text-sm font-medium transition-colors ${isAcceptingResponses ? 'text-blue1' : 'text-gray-400'}`}>
+                  Accepting responses
+                </span>
+                <Switch
+                  checked={isAcceptingResponses} 
+                  onCheckedChange={setIsAcceptingResponses}
+                  className="data-[state=checked]:bg-blue1"/>
+              </div>
+
               <div className="mb-4">
                  <Image src={"/logo.svg"} width={30} height={40} alt='logo' className="mb-4" />
               </div>
@@ -153,7 +186,9 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
                 placeholder="Form description..." rows={3}/>
             </div>
 
-            <div className="space-y-6 w-full">
+            <fieldset 
+              disabled={hasSubmissions} 
+              className={`space-y-6 w-full ${hasSubmissions ? 'opacity-60 pointer-events-none select-none grayscale-[20%]' : ''}`}>
               {questions.map((q, index) => (
                 <QuestionBlock
                   key={q.id}
@@ -166,7 +201,8 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
                   onRemoveOption={removeOption}
                 />
               ))}
-            </div>
+            </fieldset>
+
             {questions.length === 0 && (
               <div className="py-12 text-center text-gray-400 text-sm ounded-xl">
                 Click any tool on the left sidebar to start building your form
@@ -175,6 +211,23 @@ const updateQuestion = (qId: string, field: keyof Question, value: any) => {
           </div>
         </main>
       </div>
+
+      <AlertDialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Form is Locked</AlertDialogTitle>
+            <AlertDialogDescription>
+              This form already has submissions. To prevent data corruption, you can no longer edit, add, or delete the questions.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowAlertDialog(false)}>
+              Got it
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </div>
   );
 }

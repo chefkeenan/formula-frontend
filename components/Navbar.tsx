@@ -31,10 +31,15 @@ export default function Navbar() {
             </Link>
         <div className="flex items-center gap-4">
           
-          {!isLoggedIn && (
+          {isLoggedIn ? (
+          <Link href="/dashboard" className="bg-blue1 text-white px-6 py-2.5 rounded font-semibold hover:bg-blue3 transition-colors text-sm">
+            Dashboard
+          </Link>
+          ) : (
           <Link href="/login" className="bg-blue1 text-white px-6 py-2.5 rounded font-semibold hover:bg-blue3 transition-colors text-sm">
             Login
-          </Link>)}
+          </Link>
+          )}
         </div>
         </div>
 

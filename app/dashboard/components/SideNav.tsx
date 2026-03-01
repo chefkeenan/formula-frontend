@@ -45,7 +45,7 @@ export default function SideNav({ onCreateForm }: SideNavProps) {
             
             <div className='border-b border-gray-200 mb-3'>
             <Button onClick={handleCreateForm}
-            className={`flex text-blue1 items-center gap-3 p-3 rounded-md mb-4
+            className={`w-full flex text-blue1 items-center gap-3 p-3 rounded-md mb-4
             ${path == "/dashboard/response" && "bg-gray-100"}`}>
                 <PlusCircle />
                 Create a New Form
